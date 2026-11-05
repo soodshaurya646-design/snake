@@ -17,6 +17,7 @@ int main() {
     int directionY = 0;
     int foodX = GetRandomValue(0,25)*snakeSize;
     int foodY = GetRandomValue(0,19)*snakeSize;
+    int gameState = 0;
     float timer = 0.0f;
 
     struct Segment{
@@ -28,8 +29,14 @@ int main() {
     
     vec.push_back({210,390});
 
-
+    
     while (!WindowShouldClose()) {
+
+        
+
+
+
+        if(gameState == 1){
 
         if(IsKeyDown(KEY_RIGHT) && directionX!=-1){
             directionX = 1;
@@ -76,20 +83,59 @@ int main() {
             
 
         }
+
+        if(vec[0].snakeX < 0){
+            gameState = 2;
+        }
+
+        if(vec[0].snakeX >800){
+            gameState = 2;
+        }
+
+        if(vec[0].snakeY < 0){
+            gameState = 2;
+        }
+
+        if(vec[0].snakeY > 600){
+            gameState = 2;
+        }
+
         
         timer = 0.0f;
     
         }
+    }
+        
         BeginDrawing();
         ClearBackground(BLACK);
+
+
+        if(gameState == 0){
+            DrawText("SNAKE GAME: PRESS ENTER TO PLAY",5,200,40, GREEN);  
+            if(IsKeyPressed(KEY_ENTER)){
+                gameState = 1;
+            }
+
+        }
+
+        if(gameState == 2){
+            DrawText("GAME OVER:PRESS ENTER TO RESTART",5,200,40,GREEN);
+            if(IsKeyPressed(KEY_ENTER)){
+                vec.clear();
+                vec.push_back({210,390});
+                gameState = 1;
+            }
+        }
         
         DrawRectangle(foodX, foodY,snakeSize,snakeSize,RED);
         for(int i = 0;i<vec.size();i++ ){
             DrawRectangle(vec[i].snakeX, vec[i].snakeY, snakeSize, snakeSize, GREEN);
         }
         EndDrawing();
-
+    
     }
+
+
 
     CloseWindow();
     return 0;
